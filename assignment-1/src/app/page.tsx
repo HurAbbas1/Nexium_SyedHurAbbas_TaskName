@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Input } from "@/app/components/ui/input";
 import { Button } from "@/app/components/ui/button";
-import { AnimatePresence, motion } from "framer-motion";
+import {motion, AnimatePresence} from "framer-motion";
 import "@/app/globals.css";
 
 const QUOTES: Record<string, string[]> = {
