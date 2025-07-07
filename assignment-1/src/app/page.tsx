@@ -17,7 +17,6 @@ export default function Home() {
 
     setResults(matched.length > 0 ? matched : ['No quotes found for this topic.']);
   };
-
   return (
     <main className="min-h-screen bg-base-200 flex flex-col items-center justify-center gap-4 p-4">
       <h1 className="text-3xl font-bold">Quote Generator</h1>
@@ -30,7 +29,6 @@ export default function Home() {
         />
         <Button onClick={handleSearch}>Get Quotes</Button>
       </div>
-
       <div className="space-y-3 mt-6 w-full max-w-lg">
         {results.map((quote, idx) => (
           <div key={idx} className="p-4 bg-white rounded shadow text-black">
