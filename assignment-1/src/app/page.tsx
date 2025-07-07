@@ -1,41 +1,76 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { quotes } from '@/app/lib/quotes';
-import { Input } from '@/app/components/ui/input';
-import { Button } from '@/app/components/ui/button';
+import { useState } from "react";
+import { Input } from "@/app/components/ui/input";
+import { Button } from "@/app/components/ui/button";
+import { AnimatePresence, motion } from "framer-motion";
+import "@/app/globals.css";
+
+const QUOTES: Record<string, string[]> = {
+  success: [
+    "Success is not in what you have, but who you are.",
+    "Success usually comes to those who are too busy to be looking for it.",
+    "The road to success is always under construction.",
+  ],
+  love: [
+    "Love is composed of a single soul inhabiting two bodies.",
+    "We accept the love we think we deserve.",
+    "Love is the flower you've got to let grow.",
+  ],
+  life: [
+    "Life is what happens when you're busy making other plans.",
+    "Life is either a daring adventure or nothing at all.",
+    "To live is the rarest thing in the world. Most people exist, that is all.",
+  ],
+};
 
 export default function Home() {
-  const [topic, setTopic] = useState('');
-  const [results, setResults] = useState<string[]>([]);
+  const [topic, setTopic] = useState("");
+  const [quotes, setQuotes] = useState<string[]>([]);
 
-  const handleSearch = () => {
-   const matched = quotes
-     .filter((q: { topic: string; text: string }) => q.topic.toLowerCase() === topic.toLowerCase())
-      .slice(0, 3)
-      .map(q => q.text);
-
-    setResults(matched.length > 0 ? matched : ['No quotes found for this topic.']);
+  const handleClick = () => {
+    const list = QUOTES[topic.toLowerCase()];
+    setQuotes(list || []);
   };
+
   return (
-    <main className="min-h-screen bg-base-200 flex flex-col items-center justify-center gap-4 p-4">
-      <h1 className="text-3xl font-bold">Quote Generator</h1>
-      
-      <div className="w-full max-w-md space-y-2">
-        <Input
-          placeholder="Enter a topic (e.g. motivation, life)"
-          value={topic}
-          onChange={(e) => setTopic(e.target.value)}
-        />
-        <Button onClick={handleSearch}>Get Quotes</Button>
-      </div>
-      <div className="space-y-3 mt-6 w-full max-w-lg">
-        {results.map((quote, idx) => (
-          <div key={idx} className="p-4 bg-white rounded shadow text-black">
-            {quote}
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-gradient-to-br from-[#0f2027] via-[#203a43] to-[#2c5364] text-white">
+      <div className="max-w-xl w-full space-y-6">
+        <h1 className="text-4xl font-bold text-center mb-6 animate-fade-in-down">
+          ✨ Quote Generator
+        </h1>
+        <div className="flex gap-2">
+          <Input
+            className="bg-white text-black rounded-xl px-4 py-2 w-full focus:ring-2 focus:ring-sky-400 shadow-lg transition"
+            placeholder="Enter a topic (e.g. success, love, life)"
+            value={topic}
+            onChange={(e) => setTopic(e.target.value)}
+          />
+          <Button
+            onClick={handleClick}
+            className="rounded-xl bg-sky-500 hover:bg-sky-600 transition px-6 py-2 shadow-lg"
+          >
+            Get Quotes
+          </Button>
+        </div>
+
+        <AnimatePresence>
+          <div className="space-y-4 mt-8">
+            {quotes.map((quote, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.4 }}
+                className="p-4 bg-white text-black rounded-lg shadow-md border border-sky-300"
+              >
+                {quote}
+              </motion.div>
+            ))}
           </div>
-        ))}
+        </AnimatePresence>
       </div>
-    </main>
+    </div>
   );
 }
